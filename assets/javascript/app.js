@@ -58,14 +58,27 @@
   	var startTime = childSnapshot.val().start;
   	var frequency = childSnapshot.val().rate;
 
-  	//Train info
+  	//Calculate minutes till arrival:  take current time in Unix, subtract the startTime and find modulus (remainder) between the difference and the frequency
+    var elapsedTime = moment().diff(moment.unix(startTime),"minutes");
+    var remainderMins = moment().diff(moment.unix(elapsedTime),"minutes")%frequency;
+    var waitMins = frequency - remainderMins;
+
+
+    //Calculate arrival time, add minutes to the current time
+    var nextTrain = moment().add(waitMins,"m").format("hh:mm A");
+
+    //Train info
   	console.log(trainName);
   	console.log(trainDestination);
   	console.log(startTime);
   	console.log(frequency);
+    console.log(moment().format("hh:mm A"));
+    console.log(nextTrain);
+
+
 
   	//Add each train's data into the table
-  	$("#trainTable > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + startTime + "</td><td>" + frequency + "</tr>");
+  	$("#trainTable > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + startTime + "</td><td>" + frequency + "</td><td>"+nextTrain+"</td></tr>");
   });
 
   
